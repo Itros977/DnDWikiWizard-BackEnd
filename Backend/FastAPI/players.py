@@ -32,4 +32,7 @@ async def userlist():
 @app.get("/player/{id}")
 async def player(id: int):
     players = filter(lambda player: player.id == id, jugadores_list)
-    return list(players)[0]
+    try:
+        return list(players)[0]
+    except:
+        return "{" "}"
