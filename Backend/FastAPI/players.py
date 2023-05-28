@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
 app= FastAPI()
@@ -35,7 +35,7 @@ async def player(id: int):
     return search_player(id)
     
 #Query
-@app.get("/playerquery/")
+@app.get("/playerquery/", status_code=201)
 async def player(id: int):
     return search_player(id)
     
@@ -44,13 +44,13 @@ def search_player(id: int):
     try:
         return list(players)[0]
     except:
-        return {"Error": "No existe actualmente un elemento con esa id "}
+        raise HTTPException(status_code=404)
 
 #Post de un usuario
-@app.post("/player/")
+@app.post("/player/", status_code=201)
 async def player(player: Jugador):
     if type(search_player(player.id)) == Jugador:
-        return {"Error": "El usuario ya existe "}
+        raise HTTPException(status_code=204)
         
     jugadores_list.append(player)
     return player
