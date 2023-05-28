@@ -29,10 +29,20 @@ async def root():
 async def userlist():
     return jugadores_list
 
+#Path
 @app.get("/player/{id}")
 async def player(id: int):
+    return search_player(id)
+    
+#Query
+@app.get("/playerquery/")
+async def player(id: int):
+    return search_player(id)
+    
+def search_player(id: int):
     players = filter(lambda player: player.id == id, jugadores_list)
     try:
         return list(players)[0]
     except:
-        return "{" "}"
+        return {"Error": "No existe actualmente un elemento con esa id "}
+    
