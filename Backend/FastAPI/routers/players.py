@@ -1,7 +1,7 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
-app= FastAPI()
+router= APIRouter()
 
 #levantar server uvicorn main:app --reload
 
@@ -21,21 +21,21 @@ jugadores_list = [Jugador(id=1,nombre="Gimli",raza="Enano",rol="Tanque",rutaFoto
                   Jugador(id=3,nombre="Legolas",raza="Elfo",rol="Ranger",rutaFoto="",hp=18,mana=15,xp=12,nivel=8),
                   Jugador(id=4,nombre="Gandalf",raza="Istari",rol="Mago",rutaFoto="",hp=18,mana=15,xp=12,nivel=8)]
 
-@app.get("/players")
+@router.get("/players")
 async def root():
     return "Hola FastAPI, estamos desplegados en casita, en la parte de jugadores"
 
-@app.get("/playerslist")
+@router.get("/playerslist")
 async def userlist():
     return jugadores_list
 
 #Path
-@app.get("/player/{id}")
+@router.get("/player/{id}")
 async def player(id: int):
     return search_player(id)
     
 #Query
-@app.get("/playerquery/", status_code=201)
+@router.get("/playerquery/", status_code=201)
 async def player(id: int):
     return search_player(id)
     
@@ -47,7 +47,7 @@ def search_player(id: int):
         raise HTTPException(status_code=404)
 
 #Post de un usuario
-@app.post("/player/", status_code=201)
+@router.post("/player/", status_code=201)
 async def player(player: Jugador):
     if type(search_player(player.id)) == Jugador:
         raise HTTPException(status_code=204)
@@ -55,7 +55,7 @@ async def player(player: Jugador):
     jugadores_list.append(player)
     return player
         
-@app.put("/modifyplayer/")
+@router.put("/modifyplayer/")
 async def player(player: Jugador):
     
     found = False
@@ -70,7 +70,7 @@ async def player(player: Jugador):
         return player
 
 #Delete de un usuario
-@app.delete("/player/{id}")
+@router.delete("/player/{id}")
 async def player(id: int):
     
     found = False
