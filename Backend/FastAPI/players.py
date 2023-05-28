@@ -47,12 +47,13 @@ def search_player(id: int):
         return {"Error": "No existe actualmente un elemento con esa id "}
 
 #Post de un usuario
-@app.post("/newplayer/")
+@app.post("/player/")
 async def player(player: Jugador):
     if type(search_player(player.id)) == Jugador:
         return {"Error": "El usuario ya existe "}
-    else:    
-        jugadores_list.append(player)
+        
+    jugadores_list.append(player)
+    return player
         
 @app.put("/modifyplayer/")
 async def player(player: Jugador):
@@ -64,4 +65,19 @@ async def player(player: Jugador):
             jugadores_list[index] = player
             found = True
     if not found:
-        return {"Error": "No existe el usuario al actualizar "} 
+        return {"Error": "No existe el usuario al actualizar "}
+    else:
+        return player
+
+#Delete de un usuario
+@app.delete("/player/{id}")
+async def player(id: int):
+    
+    found = False
+    
+    for index, saved_players in enumerate(jugadores_list):
+        if saved_players.id == id:
+            del jugadores_list[index]
+            found = True
+    if not found:
+        return {"Error": "No existe el usuario a eliminar "}
