@@ -1,9 +1,11 @@
 from fastapi import FastAPI
 from routers import players
+from fastapi.staticfiles import StaticFiles
 
 app= FastAPI()
 
 app.include_router(players.router)
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 @app.get("/")
 async def root():
